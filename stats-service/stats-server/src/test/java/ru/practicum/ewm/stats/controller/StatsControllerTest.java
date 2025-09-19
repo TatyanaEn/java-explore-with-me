@@ -44,8 +44,8 @@ class StatsControllerTest {
     @Test
     void create_whenInvoked_thenReturnResponseStatusCreated() {
         mvc.perform(MockMvcRequestBuilders.post("/hit")
-                        .content(mapper.writeValueAsString(new HitDto("testApp", "testUri", "testIp"
-                                , testDate)))
+                        .content(mapper.writeValueAsString(new HitDto("testApp", "testUri", "testIp",
+                                testDate)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -56,8 +56,8 @@ class StatsControllerTest {
     @SneakyThrows
     @Test
     void get_whenInvoked_thenReturnResponseStatusOkWithCollectionViewStats() {
-        when(statsService.getStats(any(), any(), any(), any())).thenReturn(List.of(new ViewStatsDto("testApp"
-                , "testUri", 5L)));
+        when(statsService.getStats(any(), any(), any(), any())).thenReturn(List.of(new ViewStatsDto("testApp",
+                "testUri", 5L)));
 
         mvc.perform(MockMvcRequestBuilders.get("/stats")
                         .param("start", "2020-02-02 02:02:02")
