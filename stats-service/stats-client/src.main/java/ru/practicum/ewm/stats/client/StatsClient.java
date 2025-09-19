@@ -18,10 +18,10 @@ import java.util.List;
 
 @Service
 public class StatsClient {
-    @Value("${client.url}")
-    private String serverUrl;
     private final RestTemplate rest;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    @Value("${client.url}")
+    private String serverUrl;
 
     public StatsClient() {
         this.rest = new RestTemplate();

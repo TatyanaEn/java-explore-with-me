@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ValidIpAddress {
     String message() default "Invalid IP address";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }
