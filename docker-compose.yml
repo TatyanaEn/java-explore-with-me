@@ -25,7 +25,7 @@ services:
       interval: 5s
       retries: 10
 
-
+# TODO in next sprint
  # ewm-service:
   #  build: ./ewm-service
   #  image: ewm-service-image
