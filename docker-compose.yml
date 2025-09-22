@@ -26,18 +26,18 @@ services:
       retries: 10
 
 # TODO in next sprint
- # ewm-service:
-  #  build: ./ewm-service
-  #  image: ewm-service-image
-  #  container_name: ewm-service-container
-  #  ports:
-  #    - "8080:8080"
-  #  depends_on:
-  #    - ewm-db
-  #    - stats-server
-  #  environment:
-  #    - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
-  #    - CLIENT_URL=http://stats-server:9090
+  ewm-service:
+    build: ./ewm-service
+    image: ewm-service-image
+    container_name: ewm-service-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ewm-db
+      - stats-server
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
+      - CLIENT_URL=http://stats-server:9090
 
   ewm-db:
     image: postgres:16.1
