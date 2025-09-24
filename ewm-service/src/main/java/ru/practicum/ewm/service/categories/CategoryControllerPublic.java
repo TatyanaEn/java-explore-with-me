@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.service.categories.dto.CategoryDto;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/categories")
+@Validated
 public class CategoryControllerPublic {
 
     private final CategoryServiceImpl categoryService;
@@ -25,8 +27,8 @@ public class CategoryControllerPublic {
     }
 
     @GetMapping("/{catId}")
-    public CategoryDto getCategoriesById(@PathVariable("catId") Long categoryId) {
-        return categoryService.getCategoryById(categoryId);
+    public CategoryDto getCategoriesById(@PathVariable("catId") Long catId) {
+        return categoryService.getCategoryById(catId);
     }
 
 
