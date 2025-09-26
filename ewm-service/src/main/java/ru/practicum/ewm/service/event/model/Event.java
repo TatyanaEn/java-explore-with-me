@@ -3,8 +3,8 @@ package ru.practicum.ewm.service.event.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import ru.practicum.ewm.service.categories.model.Category;
-import ru.practicum.ewm.service.event.EventState;
 import ru.practicum.ewm.service.user.model.User;
 import ru.practicum.ewm.service.util.DateConstant;
 
@@ -33,8 +33,8 @@ public class Event {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name = "created_on")
-    @JsonFormat(pattern = DateConstant.DATE_TIME_PATTERN)
+    @CreationTimestamp
+    @Column(name = "created_on", insertable = false, updatable = false)
     private LocalDateTime createdOn;
 
     @Column(name = "event_date")

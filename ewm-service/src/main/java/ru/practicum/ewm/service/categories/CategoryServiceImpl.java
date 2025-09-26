@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.service.categories.dto.CategoryDto;
 import ru.practicum.ewm.service.categories.model.Category;
+import ru.practicum.ewm.service.exception.ConflictedDataException;
 import ru.practicum.ewm.service.exception.NotFoundException;
 
 import java.util.List;
@@ -36,6 +37,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto createCategory(CategoryDto request) {
+        if (!categoryRepository.findByName(request.getName()).isEmpty()) {
+            throw new ConflictedDataException("Категория с таким именем уже существует", log);
+        }
         return CategoryMapper.toCategoryDto(categoryRepository.save(CategoryMapper.toCategory(request)));
     }
 
@@ -44,7 +48,9 @@ public class CategoryServiceImpl implements CategoryService {
         Long categoryId = request.getId();
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория с ID '%d' не найдена. ".formatted(categoryId), log));
-
+        if (!categoryRepository.findByName(request.getName()).isEmpty()) {
+            throw new ConflictedDataException("Категория с таким именем уже существует", log);
+        }
         return CategoryMapper.toCategoryDto(categoryRepository.save(CategoryMapper.updateCategoryFields(category, request)));
     }
 

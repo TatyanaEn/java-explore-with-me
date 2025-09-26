@@ -13,12 +13,13 @@ import lombok.*;
 public class UserDto {
     Long id;
     @NotBlank
-    @Size(max = 255)
+    @Size(min = 2, max = 250)
     String name;
+
     @Email
     @NotBlank
     @NotNull
-    @Size(max = 512)
+    @Size(min = 6, max = 254)
     String email;
 
     public boolean hasEmail() {

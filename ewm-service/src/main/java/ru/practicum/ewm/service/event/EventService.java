@@ -1,26 +1,36 @@
 package ru.practicum.ewm.service.event;
 
-import ru.practicum.ewm.service.categories.dto.CategoryDto;
 import ru.practicum.ewm.service.event.dto.*;
 
 import java.util.List;
 
 public interface EventService {
 
+    List<EventShortDto> getEventsByUser(Long userId, Integer from, Integer size);
+
     List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid, String rangeStart, String rangeEnd,
                                   Boolean onlyAvailable, String sort, Integer from, Integer size);
 
+    List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd,
+                                         Integer from, Integer size);
+
+    EventFullDto  getEvent(Long eventId);
+
+    EventFullDto getEventByUser(Long userId, Long eventId);
+
     EventFullDto createEvent(NewEventDto newEvent, Long userId);
 
-    EventFullDto updateEvent(UpdateEventAdminRequest request,  Long eventId);
+    EventFullDto updateEventByAdmin(UpdateEventAdminRequest request,  Long eventId);
 
-    /*List<EventShortDto> getEventsByUserId(Integer from, Integer size, Long userId);
+    EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest request);
 
-    EventFullDto getEventsById(Long eventId);
+    ParticipationRequestDto createRequest(Long userId, Long eventId);
 
+    List<ParticipationRequestDto> getRequestsByUser(Long userId);
 
+    List<ParticipationRequestDto> getRequestsByEvent(Long userId, Long eventId);
 
-    EventFullDto updateEvent(UpdateEventUserRequest request, Long userId, Long eventId);
+    EventRequestStatusUpdateResult updateRequestByUser(long userId, long eventId, EventRequestStatusUpdateRequest request);
 
-    void deleteCategory(Long catId);*/
+    ParticipationRequestDto cancelRequestByUser(long userId, long requestId);
 }

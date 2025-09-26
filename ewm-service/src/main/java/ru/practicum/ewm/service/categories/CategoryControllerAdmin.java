@@ -7,8 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.service.categories.dto.CategoryDto;
-import ru.practicum.ewm.service.categories.model.Category;
-import ru.practicum.ewm.service.exception.NotFoundException;
+import ru.practicum.ewm.service.event.repository.EventRepository;
+import ru.practicum.ewm.service.exception.ConflictedDataException;
+
 
 @Slf4j
 @RestController
@@ -18,6 +19,7 @@ import ru.practicum.ewm.service.exception.NotFoundException;
 public class CategoryControllerAdmin {
 
     private final CategoryServiceImpl categoryService;
+    private final EventRepository eventRepository;
     
 
     @PostMapping
@@ -30,12 +32,15 @@ public class CategoryControllerAdmin {
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable("catId") Long categoryId) {
+        if (!eventRepository.findByCategory_Id(categoryId).isEmpty()) {
+            throw new ConflictedDataException("Нельзя удалить категорию с привязанными событиями.", log);
+        }
         categoryService.deleteCategory(categoryId);
     }
 
     @PatchMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto updateCategory(@PathVariable("catId") long catId, @RequestBody CategoryDto request) {
+    public CategoryDto updateCategory(@PathVariable("catId") long catId, @Valid @RequestBody CategoryDto request) {
         request.setId(catId);
         return categoryService.updateCategory(request);
     }

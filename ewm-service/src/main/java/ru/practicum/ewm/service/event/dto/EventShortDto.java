@@ -26,10 +26,9 @@ public class EventShortDto {
 
     @NotBlank
     @NotNull
-    @Size(max = 2000)
+    @Size(min = 20, max = 2000)
     private String annotation;
 
-    @NotBlank
     @NotNull
     private CategoryDto category;
 
@@ -37,17 +36,14 @@ public class EventShortDto {
 
     @NotBlank
     @NotNull
-    @Future
     @JsonFormat(pattern = DATE_TIME_PATTERN)
     private String eventDate;
 
     private Long id;
 
-    @NotBlank
     @NotNull
     private UserShortDto initiator;
 
-    @NotBlank
     @NotNull
     private Boolean paid;
 

@@ -3,6 +3,8 @@ package ru.practicum.ewm.service.error;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,9 +41,16 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleParameterNotValid(final ParameterNotValidException e) {
-        return new ErrorResponse("Некорректное значение параметра " + e.getParameter() + ": " + e.getReason());
+    public ErrorResponse handleParameterNotValid(final MethodArgumentNotValidException e) {
+        return new ErrorResponse("Некорректное значение параметра " + e.getParameter() + ": " + e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleParameterNotValid(final MissingServletRequestParameterException e) {
+        return new ErrorResponse("Параметр отсуствует " + e.getParameterName() + ": " + e.getMessage());
+    }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

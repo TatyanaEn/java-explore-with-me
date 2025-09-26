@@ -44,7 +44,7 @@ services:
     ports:
       - "5431:5432"
     environment:
-      - POSTGRES_DB=emm
+      - POSTGRES_DB=ewm
       - POSTGRES_USER=ewm
       - POSTGRES_PASSWORD=123
     healthcheck:
