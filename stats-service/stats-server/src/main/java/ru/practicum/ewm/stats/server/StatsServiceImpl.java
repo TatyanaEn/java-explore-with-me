@@ -1,16 +1,18 @@
 package ru.practicum.ewm.stats.server;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.stats.dto.HitDto;
 import ru.practicum.ewm.stats.dto.ViewStatsDto;
+import ru.practicum.ewm.stats.server.exception.ValidationException;
 import ru.practicum.ewm.stats.server.model.EndpointHit;
 
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class StatsServiceImpl implements StatsService {
     @Transactional(readOnly = true)
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (start.isAfter(end)) {
-            throw new DateTimeException("Не верно указан временной диапазон");
+            throw new ValidationException("Не верно указан временной диапазон", log);
         }
         if (unique) {
             if (uris != null) {
