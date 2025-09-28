@@ -1,5 +1,6 @@
 package ru.practicum.ewm.service.event.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +35,14 @@ public class EventControllerPublic {
                                          @RequestParam(value = "onlyAvailable", required = false)  Boolean onlyAvailable,
                                          @RequestParam(value = "sort", required = false)  String sort,
                                          @RequestParam(value = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
-                                         @RequestParam(value = "size",required = false, defaultValue = "10") @Positive Integer size) {
-        return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+                                         @RequestParam(value = "size",required = false, defaultValue = "10") @Positive Integer size,
+                                         HttpServletRequest request) {
+        return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
     }
 
     @GetMapping("/{id}")
-    public EventFullDto getEvent(@PathVariable("id") Long eventId) {
-        return eventService.getEvent(eventId);
+    public EventFullDto getEvent(@PathVariable("id") Long eventId, HttpServletRequest request) {
+        return eventService.getEvent(eventId, request);
     }
 
 }

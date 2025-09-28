@@ -35,7 +35,6 @@ public class EndpointHit {
     private String uri;
 
     @Column(nullable = false, length = 15)
-    @ValidIpAddress
     private String ip;
 
     @Column(nullable = false)

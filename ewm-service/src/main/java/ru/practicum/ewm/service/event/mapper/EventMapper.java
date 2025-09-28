@@ -64,7 +64,7 @@ public final class EventMapper {
                 .annotation(event.getAnnotation())
                 .description(event.getDescription())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
-                //.confirmedRequests()
+                //.confirmedRequests(confirmedRequestsCount)
                 .createdOn(dateTimeFormatter
                         .format(event.getCreatedOn()))
                 .eventDate(dateTimeFormatter
@@ -77,7 +77,7 @@ public final class EventMapper {
                 .requestModeration(event.getRequestModeration())
                 .title(event.getTitle())
                 .state(event.getState().toString())
-                //.views()
+                //.views(viewsCount)
                 .build();
     }
 

@@ -48,9 +48,10 @@ public class CategoryServiceImpl implements CategoryService {
         Long categoryId = request.getId();
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория с ID '%d' не найдена. ".formatted(categoryId), log));
-        if (!categoryRepository.findByName(request.getName()).isEmpty()) {
-            throw new ConflictedDataException("Категория с таким именем уже существует", log);
-        }
+        if (!(category.getName().equals(request.getName())))
+            if (!categoryRepository.findByName(request.getName()).isEmpty()) {
+                throw new ConflictedDataException("Категория с таким именем уже существует", log);
+            }
         return CategoryMapper.toCategoryDto(categoryRepository.save(CategoryMapper.updateCategoryFields(category, request)));
     }
 

@@ -19,4 +19,6 @@ public interface RequestRepository extends JpaRepository<Request, Long>, Queryds
 
     List<Request> findByStatus(RequestStatus status);
 
+    List<Request> findByIdInAndStatus(List<Long> ids, RequestStatus status);
+
 }
