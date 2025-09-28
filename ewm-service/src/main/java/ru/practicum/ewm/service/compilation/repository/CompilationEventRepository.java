@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CompilationEventRepository extends JpaRepository<CompilationEvent, Long> {
 
-    List<CompilationEvent> findByCompilationId(Long compilation_id);
+    List<CompilationEvent> findByCompilationId(Long compilationId);
 }
