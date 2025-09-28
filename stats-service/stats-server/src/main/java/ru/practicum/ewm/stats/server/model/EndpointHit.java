@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.ewm.stats.server.validation.ValidIpAddress;
 
 import java.time.LocalDateTime;
 
