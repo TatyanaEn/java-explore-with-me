@@ -8,7 +8,10 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.ewm.service.exception.*;
+import ru.practicum.ewm.service.exception.ConditionsNotMetException;
+import ru.practicum.ewm.service.exception.ConflictedDataException;
+import ru.practicum.ewm.service.exception.NotFoundException;
+import ru.practicum.ewm.service.exception.ValidationException;
 
 @Slf4j
 @RestControllerAdvice

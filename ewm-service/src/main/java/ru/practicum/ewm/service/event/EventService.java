@@ -1,7 +1,14 @@
 package ru.practicum.ewm.service.event;
 
 import jakarta.servlet.http.HttpServletRequest;
-import ru.practicum.ewm.service.event.dto.*;
+import ru.practicum.ewm.service.event.dto.EventFullDto;
+import ru.practicum.ewm.service.event.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.ewm.service.event.dto.EventRequestStatusUpdateResult;
+import ru.practicum.ewm.service.event.dto.EventShortDto;
+import ru.practicum.ewm.service.event.dto.NewEventDto;
+import ru.practicum.ewm.service.event.dto.ParticipationRequestDto;
+import ru.practicum.ewm.service.event.dto.UpdateEventAdminRequest;
+import ru.practicum.ewm.service.event.dto.UpdateEventUserRequest;
 
 import java.util.List;
 
@@ -17,13 +24,13 @@ public interface EventService {
                                         String rangeStart, String rangeEnd,
                                         Integer from, Integer size);
 
-    EventFullDto  getEvent(Long eventId, HttpServletRequest request);
+    EventFullDto getEvent(Long eventId, HttpServletRequest request);
 
     EventFullDto getEventByUser(Long userId, Long eventId);
 
     EventFullDto createEvent(NewEventDto newEvent, Long userId);
 
-    EventFullDto updateEventByAdmin(UpdateEventAdminRequest request,  Long eventId);
+    EventFullDto updateEventByAdmin(UpdateEventAdminRequest request, Long eventId);
 
     EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest request);
 

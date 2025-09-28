@@ -17,15 +17,10 @@ import ru.practicum.ewm.service.user.UserMapper;
 import ru.practicum.ewm.service.util.DateConstant;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 
 @Component
 @RequiredArgsConstructor
 public final class EventMapper {
-
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DateConstant.DATE_TIME_PATTERN)
-            .withZone(ZoneOffset.UTC);
 
 
     public static Event toEvent(NewEventDto eventDto) {
@@ -35,7 +30,7 @@ public final class EventMapper {
                 .description(eventDto.getDescription())
                 .lat(eventDto.getLocation().getLat())
                 .lon(eventDto.getLocation().getLon())
-                .eventDate(LocalDateTime.parse(eventDto.getEventDate(), dateTimeFormatter))
+                .eventDate(LocalDateTime.parse(eventDto.getEventDate(), DateConstant.dateTimeFormatter))
                 .paid(eventDto.getPaid() != null && eventDto.getPaid())
                 .title(eventDto.getTitle())
                 .participantLimit(eventDto.getParticipantLimit() == null ? 0 : eventDto.getParticipantLimit())
@@ -48,13 +43,11 @@ public final class EventMapper {
                 .id(event.getId())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
-                //.confirmedRequests()
-                .eventDate(dateTimeFormatter
+                .eventDate(DateConstant.dateTimeFormatter
                         .format(event.getEventDate()))
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .paid(event.getPaid())
                 .title(event.getTitle())
-                //.views()
                 .build();
     }
 
@@ -64,20 +57,18 @@ public final class EventMapper {
                 .annotation(event.getAnnotation())
                 .description(event.getDescription())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
-                //.confirmedRequests(confirmedRequestsCount)
-                .createdOn(dateTimeFormatter
+                .createdOn(DateConstant.dateTimeFormatter
                         .format(event.getCreatedOn()))
-                .eventDate(dateTimeFormatter
+                .eventDate(DateConstant.dateTimeFormatter
                         .format(event.getEventDate()))
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .location(LocationDto.builder().lat(event.getLat()).lon(event.getLon()).build())
                 .paid(event.getPaid())
                 .participantLimit(event.getParticipantLimit())
-                .publishedOn(event.getPublishedOn() == null ? null : dateTimeFormatter.format(event.getPublishedOn()))
+                .publishedOn(event.getPublishedOn() == null ? null : DateConstant.dateTimeFormatter.format(event.getPublishedOn()))
                 .requestModeration(event.getRequestModeration())
                 .title(event.getTitle())
                 .state(event.getState().toString())
-                //.views(viewsCount)
                 .build();
     }
 

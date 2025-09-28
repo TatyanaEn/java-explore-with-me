@@ -1,6 +1,5 @@
 package ru.practicum.ewm.service.compilation;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import ru.practicum.ewm.service.compilation.dto.CompilationDto;

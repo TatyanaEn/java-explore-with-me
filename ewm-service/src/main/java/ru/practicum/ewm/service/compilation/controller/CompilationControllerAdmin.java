@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.ewm.service.categories.dto.CategoryDto;
 import ru.practicum.ewm.service.compilation.CompilationService;
 import ru.practicum.ewm.service.compilation.dto.CompilationDto;
 import ru.practicum.ewm.service.compilation.dto.NewCompilationDto;
 import ru.practicum.ewm.service.compilation.dto.UpdateCompilationRequest;
-import ru.practicum.ewm.service.exception.ConflictedDataException;
 
 @Slf4j
 @RestController

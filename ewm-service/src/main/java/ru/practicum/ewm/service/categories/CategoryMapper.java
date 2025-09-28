@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.service.categories.dto.CategoryDto;
 import ru.practicum.ewm.service.categories.model.Category;
-import ru.practicum.ewm.service.user.dto.UserDto;
-import ru.practicum.ewm.service.user.model.User;
 
 @Component
 @RequiredArgsConstructor

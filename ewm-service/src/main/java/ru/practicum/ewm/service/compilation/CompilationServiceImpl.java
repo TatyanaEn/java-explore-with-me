@@ -8,8 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.service.categories.CategoryMapper;
-import ru.practicum.ewm.service.categories.model.Category;
 import ru.practicum.ewm.service.compilation.dto.CompilationDto;
 import ru.practicum.ewm.service.compilation.dto.NewCompilationDto;
 import ru.practicum.ewm.service.compilation.dto.UpdateCompilationRequest;
@@ -21,7 +19,6 @@ import ru.practicum.ewm.service.compilation.repository.CompilationRepository;
 import ru.practicum.ewm.service.event.dto.EventShortDto;
 import ru.practicum.ewm.service.event.mapper.EventMapper;
 import ru.practicum.ewm.service.event.model.Event;
-import ru.practicum.ewm.service.event.model.QEvent;
 import ru.practicum.ewm.service.event.repository.EventRepository;
 import ru.practicum.ewm.service.exception.ConflictedDataException;
 import ru.practicum.ewm.service.exception.NotFoundException;
@@ -33,7 +30,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CompilationServiceImpl implements  CompilationService {
+public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
     private final CompilationEventRepository compilationEventRepository;
@@ -84,7 +81,7 @@ public class CompilationServiceImpl implements  CompilationService {
         Pageable pageable = PageRequest.of(from / size, size);
         List<CompilationDto> result = compilationRepository.findAll(bPredicate, pageable).map(CompilationMapper::toCompilationDto).getContent();
         for (CompilationDto comp : result) {
-            List<EventShortDto> eventList =  new java.util.ArrayList<>(List.of());
+            List<EventShortDto> eventList = new java.util.ArrayList<>(List.of());
             for (CompilationEvent compilationEvent : compilationEventRepository.findByCompilationId(comp.getId())) {
                 eventList.add(EventMapper.toEventShortDto(eventRepository.findById(compilationEvent.getEventId()).get()));
             }
@@ -95,10 +92,10 @@ public class CompilationServiceImpl implements  CompilationService {
 
     @Override
     public CompilationDto getCompilationById(Long compId) {
-        CompilationDto result  = compilationRepository.findById(compId)
+        CompilationDto result = compilationRepository.findById(compId)
                 .map(CompilationMapper::toCompilationDto)
                 .orElseThrow(() -> new NotFoundException("Подборка с ID '%d' не найдена. ".formatted(compId), log));
-        List<EventShortDto> eventList =  new java.util.ArrayList<>(List.of());
+        List<EventShortDto> eventList = new java.util.ArrayList<>(List.of());
         for (CompilationEvent compilationEvent : compilationEventRepository.findByCompilationId(result.getId())) {
             eventList.add(EventMapper.toEventShortDto(eventRepository.findById(compilationEvent.getEventId()).get()));
         }

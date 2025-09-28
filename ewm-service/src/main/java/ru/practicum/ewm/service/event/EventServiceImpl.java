@@ -13,10 +13,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.practicum.ewm.service.categories.CategoryRepository;
 import ru.practicum.ewm.service.categories.model.Category;
-import ru.practicum.ewm.service.event.dto.*;
+import ru.practicum.ewm.service.event.dto.EventFullDto;
+import ru.practicum.ewm.service.event.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.ewm.service.event.dto.EventRequestStatusUpdateResult;
+import ru.practicum.ewm.service.event.dto.EventShortDto;
+import ru.practicum.ewm.service.event.dto.NewEventDto;
+import ru.practicum.ewm.service.event.dto.ParticipationRequestDto;
+import ru.practicum.ewm.service.event.dto.UpdateEventAdminRequest;
+import ru.practicum.ewm.service.event.dto.UpdateEventUserRequest;
 import ru.practicum.ewm.service.event.mapper.EventMapper;
 import ru.practicum.ewm.service.event.mapper.RequestMapper;
 import ru.practicum.ewm.service.event.model.Event;
@@ -39,35 +45,29 @@ import ru.practicum.ewm.stats.dto.ViewStatsDto;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
+    final StatsClient statsClient;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final RequestRepository requestRepository;
-    final StatsClient statsClient;
     @Value("${app}")
     String app;
 
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DateConstant.DATE_TIME_PATTERN)
-            .withZone(ZoneOffset.UTC);
-
     @Override
-    public List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories,String rangeStart, String rangeEnd,
-                                                Integer from, Integer size){
+    public List<EventFullDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd,
+                                               Integer from, Integer size) {
         BooleanExpression bPredicate;
         bPredicate = Expressions.asBoolean(true).isTrue();
 
@@ -88,15 +88,15 @@ public class EventServiceImpl implements EventService {
             bPredicate = bPredicate.and(QEvent.event.category.id.in(categories));
         }
         if (rangeStart == null || rangeStart.isBlank()) {
-            rangeStart = dateTimeFormatter
+            rangeStart = DateConstant.dateTimeFormatter
                     .format(LocalDateTime.now());
         }
         if (!(rangeStart == null || rangeStart.isBlank())) {
-            bPredicate = bPredicate.and(QEvent.event.eventDate.after(LocalDateTime.parse(rangeStart, dateTimeFormatter)));
+            bPredicate = bPredicate.and(QEvent.event.eventDate.after(LocalDateTime.parse(rangeStart, DateConstant.dateTimeFormatter)));
         }
 
         if (!(rangeEnd == null || rangeEnd.isBlank())) {
-            bPredicate = bPredicate.and(QEvent.event.eventDate.before(LocalDateTime.parse(rangeEnd, dateTimeFormatter)));
+            bPredicate = bPredicate.and(QEvent.event.eventDate.before(LocalDateTime.parse(rangeEnd, DateConstant.dateTimeFormatter)));
         }
 
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("eventDate").descending());
@@ -117,16 +117,16 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findAll(bPredicate, pageable).stream()
                 .map(EventMapper::toEventShortDto)
                 .peek(event ->
-                    event.setConfirmedRequests(requestRepository.countByEvent_IdAndStatus(event.getId(),
-                        RequestStatus.CONFIRMED)))
+                        event.setConfirmedRequests(requestRepository.countByEvent_IdAndStatus(event.getId(),
+                                RequestStatus.CONFIRMED)))
                 .toList();
 
     }
 
     @Override
-    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,String rangeStart,
+    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid, String rangeStart,
                                          String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size,
-                                         HttpServletRequest request){
+                                         HttpServletRequest request) {
 
         BooleanExpression bPredicate = Expressions.asBoolean(true).isTrue();
 
@@ -142,17 +142,20 @@ public class EventServiceImpl implements EventService {
             bPredicate = bPredicate.and(QEvent.event.paid.eq(paid));
         }
         if (rangeStart == null || rangeStart.isBlank()) {
-            rangeStart = dateTimeFormatter
+            rangeStart = DateConstant.dateTimeFormatter
                     .format(LocalDateTime.now());
         }
         if (!(rangeStart == null || rangeStart.isBlank())) {
-            bPredicate = bPredicate.and(QEvent.event.eventDate.after(LocalDateTime.parse(rangeStart, dateTimeFormatter)));
+            bPredicate = bPredicate.and(QEvent.event.eventDate.after(LocalDateTime.parse(rangeStart,
+                    DateConstant.dateTimeFormatter)));
         }
 
         if (!(rangeEnd == null || rangeEnd.isBlank())) {
-            if (LocalDateTime.parse(rangeStart, dateTimeFormatter).isAfter(LocalDateTime.parse(rangeEnd, dateTimeFormatter)))
+            if (LocalDateTime.parse(rangeStart, DateConstant.dateTimeFormatter).isAfter(LocalDateTime.parse(rangeEnd,
+                    DateConstant.dateTimeFormatter)))
                 throw new ValidationException("Не верно указан временной диапазон", log);
-            bPredicate = bPredicate.and(QEvent.event.eventDate.before(LocalDateTime.parse(rangeEnd, dateTimeFormatter)));
+            bPredicate = bPredicate.and(QEvent.event.eventDate.before(LocalDateTime.parse(rangeEnd,
+                    DateConstant.dateTimeFormatter)));
         }
         Pageable pageable = null;
         if (sort != null) {
@@ -170,9 +173,9 @@ public class EventServiceImpl implements EventService {
         if (onlyAvailable != null) {
             result.stream()
                     .filter(event -> {
-                            Long cntConfirmedRequest = requestRepository.countByEvent_IdAndStatus(event.getId(),
+                        Long cntConfirmedRequest = requestRepository.countByEvent_IdAndStatus(event.getId(),
                                 RequestStatus.CONFIRMED);
-                            return event.getParticipantLimit() > cntConfirmedRequest;
+                        return event.getParticipantLimit() > cntConfirmedRequest;
                     }).toList();
         }
         Optional<LocalDateTime> start = result.stream()
@@ -201,7 +204,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с ID '%d' не найдено. ".formatted(eventId), log));
         if (event.getState().equals(EventState.PUBLISHED)) {
-            EventFullDto result =EventMapper.toEventFullDto(event);
+            EventFullDto result = EventMapper.toEventFullDto(event);
             result.setConfirmedRequests(requestRepository.countByEvent_IdAndStatus(event.getId(),
                     RequestStatus.CONFIRMED));
             result.setViews(getViewsCount(event.getCreatedOn(), LocalDateTime.now(), List.of(request.getRequestURI()), true));
@@ -209,8 +212,7 @@ public class EventServiceImpl implements EventService {
             HitDto hit = new HitDto(app, request.getRequestURI(), request.getRemoteAddr(), LocalDateTime.now());
             statsClient.saveHit(hit);
             return result;
-        }
-        else
+        } else
             throw new NotFoundException("Событие не опубликовано", log);
     }
 
@@ -243,7 +245,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Категория с ID '%d' не найдена. "
                         .formatted(newEvent.getCategory()), log));
         if (newEvent.getEventDate() != null)
-            if (LocalDateTime.parse(newEvent.getEventDate(), dateTimeFormatter).isBefore(LocalDateTime.now())) {
+            if (LocalDateTime.parse(newEvent.getEventDate(), DateConstant.dateTimeFormatter).isBefore(LocalDateTime.now())) {
                 throw new ValidationException("Дата события не может быть меньше текущей даты", log);
             }
         Event event = EventMapper.toEvent(newEvent);
@@ -266,12 +268,12 @@ public class EventServiceImpl implements EventService {
                 throw new ConflictedDataException("Событие нельзя отклонить, так как оно уже опубликовано.", log);
             }
         if (request.getEventDate() != null)
-            if (LocalDateTime.parse(request.getEventDate(), dateTimeFormatter).isBefore(LocalDateTime.now())) {
+            if (LocalDateTime.parse(request.getEventDate(), DateConstant.dateTimeFormatter).isBefore(LocalDateTime.now())) {
                 throw new ValidationException("Дата события не может быть меньше текущей даты", log);
             }
         if (Duration.between(LocalDateTime.now(), event.getEventDate()).toHours() < 1) {
             throw new ConflictedDataException("До начала события осталось менее 1 часа", log);
-        };
+        }
         Category category = event.getCategory();
         if (request.getCategory() != null) {
             category = categoryRepository.findById(request.getCategory())
@@ -299,9 +301,9 @@ public class EventServiceImpl implements EventService {
         }
         if (Duration.between(LocalDateTime.now(), event.getEventDate()).toHours() < 2) {
             throw new ConflictedDataException("До начала события осталось менее 2 часа", log);
-        };
+        }
         if (request.getEventDate() != null)
-            if (LocalDateTime.parse(request.getEventDate(), dateTimeFormatter).isBefore(LocalDateTime.now())) {
+            if (LocalDateTime.parse(request.getEventDate(), DateConstant.dateTimeFormatter).isBefore(LocalDateTime.now())) {
                 throw new ValidationException("Дата события не может быть меньше текущей даты", log);
             }
         Category category = event.getCategory();
@@ -328,7 +330,7 @@ public class EventServiceImpl implements EventService {
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictedDataException("Нельзя участвовать в неопубликованном событии", log);
         }
-        if (event.getParticipantLimit() > 0 )
+        if (event.getParticipantLimit() > 0)
             if (requestRepository.countByEvent_IdAndStatus(eventId, RequestStatus.CONFIRMED) >= event.getParticipantLimit()) {
                 throw new ConflictedDataException("Достигнут лимит запросов на участие", log);
             }
@@ -340,7 +342,7 @@ public class EventServiceImpl implements EventService {
             request = new Request();
             request.setEvent(event);
             request.setRequester(user);
-            if (event.getParticipantLimit() > 0 ) {
+            if (event.getParticipantLimit() > 0) {
                 if (!event.getRequestModeration())
                     request.setStatus(RequestStatus.CONFIRMED);
                 else
@@ -352,7 +354,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ParticipationRequestDto>  getRequestsByUser(Long userId) {
+    public List<ParticipationRequestDto> getRequestsByUser(Long userId) {
 
         return requestRepository.findByRequester_Id(userId).stream().map(RequestMapper::toParticipationRequestDto).toList();
 
@@ -407,7 +409,7 @@ public class EventServiceImpl implements EventService {
             }
         }
         EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();
-        result.setConfirmedRequests(requestRepository.findByIdInAndStatus(request.getRequestIds() ,RequestStatus.CONFIRMED).stream().map(RequestMapper::toParticipationRequestDto).toList());
+        result.setConfirmedRequests(requestRepository.findByIdInAndStatus(request.getRequestIds(), RequestStatus.CONFIRMED).stream().map(RequestMapper::toParticipationRequestDto).toList());
         result.setRejectedRequests(requestRepository.findByIdInAndStatus(request.getRequestIds(), RequestStatus.REJECTED).stream().map(RequestMapper::toParticipationRequestDto).toList());
         return result;
     }

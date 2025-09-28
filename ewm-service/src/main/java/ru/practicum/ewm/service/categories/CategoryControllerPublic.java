@@ -5,7 +5,11 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.ewm.service.categories.dto.CategoryDto;
 
 import java.util.List;
@@ -22,7 +26,7 @@ public class CategoryControllerPublic {
 
     @GetMapping
     public List<CategoryDto> getCategories(@RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
-                                  @RequestParam(value = "size", defaultValue = "10") @Positive Integer size) {
+                                           @RequestParam(value = "size", defaultValue = "10") @Positive Integer size) {
         return categoryService.getCategories(from, size);
     }
 
