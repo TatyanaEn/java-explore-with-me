@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.ewm.stats.server.validation.ValidIpAddress;
 
 import java.time.LocalDateTime;
 
@@ -35,7 +34,6 @@ public class EndpointHit {
     private String uri;
 
     @Column(nullable = false, length = 15)
-    @ValidIpAddress
     private String ip;
 
     @Column(nullable = false)

@@ -22,7 +22,7 @@ public class ValidIpAddressValidator implements ConstraintValidator<ValidIpAddre
     @Override
     public boolean isValid(String ipAddress, ConstraintValidatorContext context) {
         if (ipAddress == null || ipAddress.isEmpty()) {
-            return true; // Consider null/empty as valid if not also marked @NotNull or @NotBlank
+            return true;
         }
         Matcher matcher = pattern.matcher(ipAddress);
         return matcher.matches();
