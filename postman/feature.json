@@ -4,7 +4,7 @@
 		"name": "Test EWM - Comments",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "44849326",
-		"_collection_link": "https://tatyana-8952128.postman.co/workspace/74c8466a-38b8-406b-883e-cde084336441/collection/44849326-2640bf00-895e-452f-8051-7895ceb8a3b4?action=share&source=collection_link&creator=44849326"
+		"_collection_link": "https://tatyana-8952128.postman.co/workspace/Tatyana's-Workspace~74c8466a-38b8-406b-883e-cde084336441/collection/44849326-2640bf00-895e-452f-8051-7895ceb8a3b4?action=share&source=collection_link&creator=44849326"
 	},
 	"item": [
 		{
@@ -99,10 +99,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"raw": "http://localhost:8080/users/:userId/comments/:eventId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"users",
 						":userId",
@@ -202,10 +204,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"raw": "http://localhost:8080/users/:userId/comments/:eventId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"users",
 						":userId",
@@ -308,10 +312,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
+					"raw": "http://localhost:8080/users/:userId/comments/:eventId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"users",
 						":userId",
@@ -416,10 +422,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/comments/:eventId/:comId",
+					"raw": "http://localhost:8080/users/:userId/comments/:eventId/:comId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"users",
 						":userId",
@@ -540,10 +548,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/comments/:eventId/:comId",
+					"raw": "http://localhost:8080/users/:userId/comments/:eventId/:comId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"users",
 						":userId",
@@ -643,10 +653,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/comments",
+					"raw": "http://localhost:8080/users/:userId/comments",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"users",
 						":userId",
@@ -748,10 +760,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/comments/event/:eventId",
+					"raw": "http://localhost:8080/comments/event/:eventId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"comments",
 						"event",
@@ -853,10 +867,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/comments/:comId",
+					"raw": "http://localhost:8080/comments/:comId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"comments",
 						":comId"
@@ -943,10 +959,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/comments/:comId",
+					"raw": "http://localhost:8080/users/:userId/comments/:comId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"users",
 						":userId",
@@ -1042,10 +1060,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/comments/:comId",
+					"raw": "http://localhost:8080/comments/:comId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"comments",
 						":comId"
@@ -1132,10 +1152,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/admin/comments/:comId",
+					"raw": "http://localhost:8080/admin/comments/:comId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"admin",
 						"comments",

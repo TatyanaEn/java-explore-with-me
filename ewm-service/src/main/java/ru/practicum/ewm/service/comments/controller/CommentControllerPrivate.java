@@ -31,22 +31,22 @@ public class CommentControllerPrivate {
 
     @PostMapping("/{eventId}")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public CommentDto addComment(@PathVariable Long userId,
-                                 @PathVariable Long eventId,
+    public CommentDto addComment(@PathVariable("userId")  Long userId,
+                                 @PathVariable("eventId")  Long eventId,
                                  @RequestBody @Valid NewCommentDto newCommentDto) {
         return commentService.addComment(userId, eventId, newCommentDto);
     }
 
     @PatchMapping("/{eventId}/{commentId}")
-    public CommentDto updateComment(@PathVariable Long userId,
-                                    @PathVariable Long eventId,
-                                    @PathVariable Long commentId,
+    public CommentDto updateComment(@PathVariable("userId") Long userId,
+                                    @PathVariable("eventId") Long eventId,
+                                    @PathVariable("commentId") Long commentId,
                                     @RequestBody @Valid NewCommentDto newCommentDto) {
         return commentService.updateComment(userId, eventId, commentId, newCommentDto);
     }
 
     @GetMapping
-    List<CommentDto> getCommentsByAuthor(@PathVariable Long userId,
+    List<CommentDto> getCommentsByAuthor(@PathVariable("userId") Long userId,
                                          @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
                                          @RequestParam(value = "size", defaultValue = "10") @Positive Integer size) {
         return commentService.getCommentsByAuthor(userId, from, size);
@@ -54,8 +54,8 @@ public class CommentControllerPrivate {
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteComment(@PathVariable Long userId,
-                              @PathVariable Long commentId) {
+    public void deleteComment(@PathVariable("userId") Long userId,
+                              @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(userId, commentId);
     }
 }
